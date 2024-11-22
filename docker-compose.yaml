@@ -19,12 +19,10 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: admin
       GF_USERS_ALLOW_SIGN_UP: false
     volumes:
-#      - ./volume/grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./volume/grafana/data:/var/lib/grafana
-      - ./volume/grafana/provisioning:/etc/grafana/provisioning
-      - ./volume/grafana/logs:/var/log/grafana
-      - ./volume/grafana/plugins:/var/lib/grafana/plugins
-      - ./volume/grafana/dashboards:/var/lib/grafana/dashboards
+      # mount: etc lib log
+      - ./volume/grafana/etc:/etc/grafana
+      - ./volume/grafana/var/lib:/var/lib/grafana
+      - ./volume/grafana/var/log:/var/log/grafana
 
   # 启动prometheus
   prometheus-demo:
