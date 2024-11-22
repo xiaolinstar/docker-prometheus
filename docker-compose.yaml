@@ -2,6 +2,10 @@ networks:
   grafana-prometheus:
     external: false
 
+# 创建挂载卷
+volumes:
+  grafana-storage: {}
+
 services:
   # 容器命名方式为：${name}-demo
 
@@ -19,10 +23,7 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: admin
       GF_USERS_ALLOW_SIGN_UP: false
     volumes:
-      # mount: etc lib log
-      - ./volume/grafana/etc:/etc/grafana
-      - ./volume/grafana/var/lib:/var/lib/grafana
-      - ./volume/grafana/var/log:/var/log/grafana
+      - grafana-storage:/var/lib/grafana
 
   # 启动prometheus
   prometheus-demo:
@@ -53,13 +54,6 @@ services:
 #      - '--path.rootfs=/host'
     environment:
       TZ: Asia/Shanghai
-#    deploy:
-#      resources:
-#        limits:
-#          cpus: "2.0"
-#          memory: 2GB
-#        reservations:
-#          memory: 512MB
     ports:
       - "9100:9100"
 

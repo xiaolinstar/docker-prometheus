@@ -1,12 +1,12 @@
 # 系统监控｜Grafana+Prometheus实践
 
-- [ ] 在Linux中使用，node-exporter监控宿主机，而不是容器内
-- [ ] 补充文件挂载相关说明信息
+- [ ]  在Linux中使用，node-exporter监控宿主机，而不是容器内
+- [ ]  补充文件挂载相关说明信息
 
 ## 前置要求
 
 - Linux macOS Windows
-- docker && docker compose 
+- docker && docker compose
 - git
 
 ## 快速开始
@@ -14,21 +14,19 @@
 ### 启动项目
 
 克隆项目
+
 ```shell
 git clone https://github.com/xiaolinstar/docker-prometheus.git
 ```
 
 进入项目目录
+
 ```shell
 cd docker-prometheus
 ```
 
-使用当前用户创建挂载目录，在Linux环境下这样创建归属于默认用户，而不是root
-```shell
-mkdir -p volume/grafana/etc && mkdir -p volume/grafana/var/lib && mkdir -p volume/grafana/var/log
-```
+使用`docker compose`启动项目
 
-`docker compose`启动项目
 ```shell
 docker compose up -d
 ```
@@ -39,13 +37,13 @@ docker compose up -d
 .
 ├── README.md # 项目说明
 ├── docker-compose.yaml # docker-compose配置文件
-├── prometheus.yml # prometheus配置文件，需要挂在到prometheus容器中
-└── volume # 宿主机与容器挂载目录
+└── prometheus.yml # prometheus配置文件，需要挂在到prometheus容器中
 ```
 
 ### 访问
 
 #### 检查prometheus数据
+
 浏览器中输入`localhost:9090/metrics`
 
 效果如下：
@@ -89,11 +87,10 @@ Connection -> Data Source -> Add new data source -> Prometheus -> Settings
 
 右上角`Refresh`按钮可以刷新数据，右侧可以调整刷新周期
 
-
 ## 参考
 
 1. Node-Exporter, https://github.com/prometheus/node_exporter
 2. Grafana, https://grafana.com/
 3. Grafana dashboards, Node Exporter Full, https://grafana.com/grafana/dashboards/1860-node-exporter-full/
 4. Docker Compose, https://github.com/docker/compose
-
+5. Run Grafana Docker image, https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/#migrate-to-v51-or-later
