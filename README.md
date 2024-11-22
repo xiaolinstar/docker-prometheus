@@ -23,6 +23,11 @@ git clone https://github.com/xiaolinstar/docker-prometheus.git
 cd docker-prometheus
 ```
 
+使用当前用户创建挂载目录，在Linux环境下这样创建归属于默认用户，而不是root
+```shell
+mkdir -p volume/grafana/etc && mkdir -p volume/grafana/var/lib && mkdir -p volume/grafana/var/log
+```
+
 `docker compose`启动项目
 ```shell
 docker compose up -d
