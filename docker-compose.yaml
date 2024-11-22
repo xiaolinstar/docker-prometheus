@@ -1,0 +1,67 @@
+networks:
+  grafana-prometheus:
+    external: false
+
+services:
+  # 容器命名方式为：${name}-demo
+
+  # 启动grafana
+  grafana-demo:
+    image: grafana/grafana
+    container_name: grafana-demo
+    ports:
+      - "9080:3000"
+    networks:
+      - grafana-prometheus
+    environment:
+      TZ: Asia/Shanghai
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: false
+    volumes:
+#      - ./volume/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./volume/grafana/data:/var/lib/grafana
+      - ./volume/grafana/provisioning:/etc/grafana/provisioning
+      - ./volume/grafana/logs:/var/log/grafana
+      - ./volume/grafana/plugins:/var/lib/grafana/plugins
+      - ./volume/grafana/dashboards:/var/lib/grafana/dashboards
+
+  # 启动prometheus
+  prometheus-demo:
+    image: prom/prometheus
+    container_name: prometheus-demo
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - "9090:9090"
+    networks:
+      - grafana-prometheus
+
+  # 启动node-exporter
+  # 在宿主机上启动，监控host而不是容器
+  node-exporter-demo:
+    image: prom/node-exporter
+    container_name: node-exporter-demo
+    networks:
+      - grafana-prometheus
+#    volumes:
+#      # ro: read only
+#      - /proc:/host/proc:ro
+#      - /sys:/host/sys:ro
+#      - /:/rootfs:ro
+#    command:
+#      - '--path.rootfs=/host'
+    environment:
+      TZ: Asia/Shanghai
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "2.0"
+#          memory: 2GB
+#        reservations:
+#          memory: 512MB
+    ports:
+      - "9100:9100"
+
