@@ -39,22 +39,25 @@ services:
       - grafana-prometheus
 
   # 启动node-exporter
+  # 该模式仅支持在Linux中运行
+  # 容器内端口9100
   node-exporter-demo:
     image: prom/node-exporter
     container_name: node-exporter-demo
     environment:
       TZ: Asia/Shanghai
-
-    # bridge网桥模式
-    networks:
-      - grafana-prometheus
-    # 监听容器本身，不需要挂载本地目录 /proc和/sys
-    ports:
-      - "9100:9100"
-
     # host宿主机模式
-#    network_mode: host
-#    pid: host
-#    command:
-#      - '--path.rootfs=/host'
+    network_mode: host
+    # 容器与宿主机共享进程号
+    pid: host
+    # https://github.com/prometheus/node_exporter
+    volumes:
+      - '/:/host:ro,rslave'
+    command:
+      - '--path.rootfs=/host'
 
+    # Linux中文件系统目录: /proc /sys
+#    volumes:
+#      - /proc:/host/proc:ro
+#      - /sys:/host/sys:ro
+#      - /:/rootfs:ro
