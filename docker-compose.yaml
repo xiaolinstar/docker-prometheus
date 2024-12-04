@@ -17,13 +17,13 @@ services:
       - "9080:3000"
     networks:
       - grafana-prometheus
+    volumes:
+      - grafana-storage:/var/lib/grafana
     environment:
       TZ: Asia/Shanghai
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin
       GF_USERS_ALLOW_SIGN_UP: false
-    volumes:
-      - grafana-storage:/var/lib/grafana
 
   # 启动prometheus
   prometheus-demo:
@@ -39,21 +39,22 @@ services:
       - grafana-prometheus
 
   # 启动node-exporter
-  # 在宿主机上启动，监控host而不是容器
   node-exporter-demo:
     image: prom/node-exporter
     container_name: node-exporter-demo
-    networks:
-      - grafana-prometheus
-#    volumes:
-#      # ro: read only
-#      - /proc:/host/proc:ro
-#      - /sys:/host/sys:ro
-#      - /:/rootfs:ro
-#    command:
-#      - '--path.rootfs=/host'
     environment:
       TZ: Asia/Shanghai
+
+    # bridge网桥模式
+    networks:
+      - grafana-prometheus
+    # 监听容器本身，不需要挂载本地目录 /proc和/sys
     ports:
       - "9100:9100"
+
+    # host宿主机模式
+#    network_mode: host
+#    pid: host
+#    command:
+#      - '--path.rootfs=/host'
 

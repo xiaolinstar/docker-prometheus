@@ -14,4 +14,6 @@ scrape_configs:
   - job_name: "node-exporter"
     scrape_interval: 5s
     static_configs:
-      - targets: ["node-exporter-demo:9100"]
+#      - targets: ["host.docker.internal:9100"] # Docker Desktop
+#      - targets: ["127.0.0.1:9100"] # Docker in Linux
+      - targets: ["node-exporter-demo:9100"] # Docker-Bridge
