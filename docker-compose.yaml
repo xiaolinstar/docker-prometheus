@@ -2,10 +2,6 @@ networks:
   grafana-prometheus:
     external: false
 
-# 创建挂载卷
-volumes:
-  grafana-storage: {}
-
 services:
   # 容器命名方式为：${name}-demo
 
@@ -17,8 +13,6 @@ services:
       - "9080:3000"
     networks:
       - grafana-prometheus
-    volumes:
-      - grafana-storage:/var/lib/grafana
     environment:
       TZ: Asia/Shanghai
       GF_SECURITY_ADMIN_USER: admin
