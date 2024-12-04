@@ -1,7 +1,9 @@
 # 系统监控｜Grafana+Prometheus实践
 
 - [X]  在Linux中使用，node-exporter监控宿主机，而不是容器内
-- [ ]  补充文件挂载相关说明信息
+- [ ]  补充文件挂载相关说明信息，数据持久化
+- [ ]  监控更多中间件以及服务，mysql、redis、rabbitmq等
+- [ ]  自定义监控微服务业务指标
 
 ## 前置要求
 
@@ -25,8 +27,7 @@
 # GitHub
 git clone https://github.com/xiaolinstar/docker-prometheus.git
 # Gitee
-
-
+git clone https://gitee.com/xingxiaolin/docker-prometheus.git
 ```
 
 进入项目目录
