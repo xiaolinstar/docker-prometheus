@@ -201,5 +201,5 @@ docker compose up -d
 4. Docker Compose，https://github.com/docker/compose
 5. Run Grafana Docker image，https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/#migrate-to-v51-or-later
 6. host.docker.internal不生效，https://segmentfault.com/q/1010000042602856
-7. https://docs.docker.com/desktop/features/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host
+7. connect from a container to a service on the host，https://docs.docker.com/desktop/features/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host
 8. 花了三天时间终于搞懂Docker网络了，https://cloud.tencent.com/developer/article/1747307
