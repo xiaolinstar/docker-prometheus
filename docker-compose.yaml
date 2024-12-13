@@ -2,15 +2,6 @@ networks:
   grafana-prometheus:
     external: false
 
-# 创建挂载卷
-#volumes:
-#  grafana-storage: {}
-#  influxdb2-data: {}
-#  influxdb2-config: {}
-#  telegraf.conf: {}
-#  minio-data: {}
-#  mimir-data: {}
-
 services:
   # 容器命名方式为：${name}-demo
 
@@ -23,8 +14,6 @@ services:
     networks:
       - grafana-prometheus
     volumes:
-#      - ./volumes/grafana/data:/var/lib/grafana
-#      - ./volumes/grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./volumes/grafana/provisioning/etc/datasources:/etc/grafana/provisioning/datasources:ro
       - ./volumes/grafana/provisioning/etc/dashboards:/etc/grafana/provisioning/dashboards:ro
       - ./volumes/grafana/provisioning/var/dashboards:/var/lib/grafana/dashboards:ro
@@ -33,32 +22,6 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: true
       GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
       GF_USERS_ALLOW_SIGN_UP: false
-#    depends_on:
-#      grafana-mysql-demo:
-#        condition: service_healthy
-
-#  grafana-mysql-demo:
-#    image: mysql:8.4
-#    container_name: grafana-mysql-demo
-#    ports:
-#      - "3306:3306"
-#    networks:
-#      - grafana-prometheus
-#    volumes:
-#      - ./volumes/mysql/init.d:/docker-entrypoint-initdb.d/
-#    environment:
-#      TZ: Asia/Shanghai
-#      LANG: C.UTF-8 # 中文乱码-1
-#      # 数据库密码
-#      MYSQL_ROOT_PASSWORD: 123456
-#    # 中文乱码-2
-#    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
-#    healthcheck:
-#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
-#      start_period: 40s
 
   # 启动prometheus
   prometheus-demo:
@@ -97,81 +60,3 @@ services:
 #    command:
 #      - '--path.rootfs=/host'
 
-# S3对象存储MinIO
-#  minio-demo:
-#    image: minio/minio
-#    container_name: minio-demo
-#    ports:
-#      - "9110:9000"
-#      - "9111:9001"
-#    networks:
-#      - grafana-prometheus
-#    environment:
-#      TZ: Asia/Shanghai
-#      MINIO_ROOT_KEY: xingxiaolin
-#      MINIO_ROOT_PASSWORD: xingxiaolin
-#    volumes:
-#      - type: volume
-#        source: minio-data
-#        target: /data
-#    command: server /data --console-address ":9001"
-
-# Grafana Mimir时序数据存储方案
-#  mimir-demo:
-#    image: grafana/mimir
-#    container_name: mimir-demo
-#    ports:
-#      - "9120:8080"
-#    depends_on:
-#      - minio-demo
-#    volumes:
-#      - type: volume
-#        source: ./mimir.yaml
-#        target: /etc/mimir.yaml
-#      - type: volume
-#        source: mimir-data
-#        target: /data
-#    command: ["-config.file=/etc/mimir.yaml"]
-
-
-# influxDB，prometheus时序数据远程库
-#  influxdb-demo:
-#    image: influxdb:2.7.11
-#    container_name: influxdb-demo
-#    ports:
-#      - "8086:8086"
-#    networks:
-#      - grafana-prometheus
-#    environment:
-#      TZ: Asia/Shanghai
-#      DOCKER_INFLUXDB_INIT_MODE: setup
-#      DOCKER_INFLUXDB_INIT_USERNAME: xingxiaolin
-#      DOCKER_INFLUXDB_INIT_PASSWORD: xingxiaolin
-#      DOCKER_INFLUXDB_INIT_ORG: xiaolin.fun
-#      DOCKER_INFLUXDB_INIT_BUCKET: BUCKET_TEST
-#    volumes:
-#      - type: volume
-#        source: influxdb2-data
-#        target: /var/lib/influxdb2
-#      - type: volume
-#        source: influxdb2-config
-#        target: /etc/influxdb2
-#
-#  telegraf-demo:
-#    image: telegraf:1.21.2
-#    container_name: telegraf-demo
-#    networks:
-#      - grafana-prometheus
-#    environment:
-#      TZ: Asia/Shanghai
-#    volumes:
-#      - type: volume
-#        source: telegraf.conf
-#        target: /etc/telegraf/telegraf.conf
-#        read_only: true
-##    command:
-##      - '--config-directory=/etc/telegraf'
-##      - '--config=/etc/telegraf/telegraf.conf'
-#    depends_on:
-#      - influxdb-demo
-#
