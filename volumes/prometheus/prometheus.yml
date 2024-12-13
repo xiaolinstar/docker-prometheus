@@ -1,0 +1,57 @@
+global:
+  scrape_interval:     15s # 默认情况下，每 15s 采集一次目标数据
+  evaluation_interval: 15s # 默认情况下，每 15s 对规则进行评估
+
+# 仅包含一个采集端点的采集配置：这里是 Prometheus 本身
+scrape_configs:
+  # 作业名称作为标签 `job=<job_name>` 添加到从此配置中采集的时间序列上
+  - job_name: 'prometheus'
+    # 覆盖全局默认的参数，并将采样时间间隔设置为 5s
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["prometheus-demo:9090"]
+
+  - job_name: "node-exporter"
+    scrape_interval: 5s
+    static_configs:
+#      - targets: ["host.docker.internal:9100"] # Docker Desktop
+#      - targets: ["172.17.0.1:9100"] # Docker in Linux
+      - targets: ["node-exporter-demo:9100"] # Docker-Bridge
+#
+#  - job_name: "mimir"
+#    scrape_interval: 5s
+#    static_configs:
+#        - targets: ["mimir-demo:8080"]
+#
+#
+### 远程写
+#remote_write:
+#  - url: http://mimir-demo:8080/api/v1/push
+#    # Add X-Scope-OrgID header so that Mimir knows what tenant the remote write data should be stored in.
+#    # In this case, our tenant is "demo"
+#    headers:
+#      X-Scope-OrgID: mimir-demo
+
+#  url: 'influxdb-demo:8086/api/v1/prom/write?db=prometheus&u=xingxiaolin&p=xingxiaolin'
+#  remote_timeout: 30s
+##  basic_auth:
+##    username: 'xingxiaolin'
+##    password: 'xingxiaolin'
+#
+#  # 用于写入远程存储的队列
+#  queue_config:
+#    capacity: 1000
+#    max_shards: 1000
+#    min_shards: 1
+#    max_samples_per_send: 100
+#    batch_send_deadline: 5s
+#    min_backoff: 30ms
+#    max_backoff: 100ms
+#
+## 远程读
+#
+#remote_read:
+#  url: 'influxdb-demo:8086/api/v1/prom/read?db=prometheus&u=xingxiaolin&p=xingxiaolin'
+#
+#
+#
