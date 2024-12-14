@@ -293,7 +293,7 @@ cfg:default.paths.plugins=/var/lib/grafana/plugins
 cfg:default.paths.provisioning=/etc/grafana/provisioning
 ```
 
-启动参数可以在`docker-compos.yaml`的启动参数`command`中指定，建议不要改动。
+启动参数可以在`docker-compose.yaml`的启动参数`command`中指定，建议不要改动。
 
 **服务启动配置文件加载**
 
@@ -303,7 +303,7 @@ cfg:default.paths.provisioning=/etc/grafana/provisioning
 
 > 可以进到容器中，查看default.ini和grafana.ini，发现grafana.ini是加了注释到default.ini
 
-先读取默认初始化配置`/usr/share/grafana/conf/default.ini`，然后读取`/etc/grafana/grafana.ini`，后者会覆盖前者配置。
+先读取默认初始化配置`/usr/share/grafana/conf/default.ini`，然后读取`/etc/grafana/grafana.ini`，后者会合并（或覆盖）前者配置。
 
 默认情况下，`plugins`和`provisioning`目录都是空的，这个在后面章节介绍。
 
@@ -331,13 +331,13 @@ Grafana业务数据可以存储在关系型数据库中，官方推荐`mysql`, `
 type = mysql
 host = grafana-mysql-demo
 port = 3306
-name = grafana
+name = my_grafana
 user = admin_grafana
 # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
 password = password_grafana
 # Use either URL or the previous fields to configure the database
 # Example: mysql://user:secret@host:port/database
-url = mysql://admin_grafana:password_grafana@grafana-mysql-demo:3306/grafana
+url = mysql://admin_grafana:password_grafana@grafana-mysql-demo:3306/my_grafana
 
 # Max idle conn setting default is 2
 max_idle_conn = 2
@@ -351,7 +351,7 @@ conn_max_lifetime = 14400
 
 #### 创建mysql数据库
 
-根据上一小节配置文件信息，创建数据库`grafana`，授权用户`admin-grafana`，密码为`password-grafana`。
+根据上一小节配置文件信息，创建数据库`grafana`，授权用户`admin_grafana`，密码为`password_grafana`。
 
 在`docker-compose.yaml`中配置mysql数据库，容器名为`grafana-mysql-demo`，在mysql启动时作初始化。
 
@@ -361,13 +361,13 @@ mysql数据库grafana初始化
 
 ```sql
 # 创建数据库grafana
-CREATE DATABASE grafana DEFAULT CHARACTER SET utf8mb4;
+CREATE DATABASE my_grafana DEFAULT CHARACTER SET utf8mb4;
 
 # 创建用户
 CREATE USER 'admin_grafana'@'%' IDENTIFIED BY 'password_grafana';
 
 # 权限授予（使用更安全的方式管理密码）
-GRANT ALL PRIVILEGES ON grafana.* TO 'admin_grafana'@'%' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON my_grafana.* TO 'admin_grafana'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 ```
 
@@ -383,7 +383,7 @@ mysql数据库端口3306暴露到本地localhost，使用IDEA右端数据库插�
 
 ### Grafana Provisioning，主动配置与版本管理
 
-Grafana Provisioning是grafana 5.0版本之后引入的功能，支持通过配置文件的方式支持datasource、dashboards、plugins功能。
+Grafana Provisioning是grafana 5.0版本之后引入的功能，支持通过配置文件的方式支持datasources、dashboards、plugins功能。
 
 对于Grafana新手来说，Provisioning是一个比较新的概念，需要花点时间去理解，我通过引入几个简单问题来介绍Grafana Provisioning。
 
